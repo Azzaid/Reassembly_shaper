@@ -1,14 +1,21 @@
 //node modules
 import React from "react";
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 //components
 import LessonCard from "components/lessonCard";
-import {LESSON_STATUS} from "../../constants/lessons/lessonStatus";
 
 //assets / helpers props drilling
+import {LESSON_STATUS} from "constants/lessons/lessonStatus";
+import withModalContext from "HOC/withModalContext";
+import AddLessonModalContent from "./Components/AddLessonModalConten";
 
-export const MyContext = React.createContext("Oops error default value");
+const StyledLessonsList = styled.div`
+    .lessonsHolder {
+      display: flex;
+      border: 2px solid black;
+    }
+`
 
 class LessonList extends React.Component {
     constructor(props) {
@@ -17,6 +24,8 @@ class LessonList extends React.Component {
         this.state = {
             header: "Header 1",
             footerDivs: [],
+            someCondition: false,
+            lessonsList: [],
         }
     }
 
@@ -46,29 +55,42 @@ class LessonList extends React.Component {
         document.removeEventListener("click");
     }*/
 
+    addLesson(lessonData) {
+        this.setState(oldState => {
+            return(
+                {
+                    lessonsList: [...oldState.lessonsList, lessonData]
+                }
+            )},
+            () => {
+            this.props.updateModalContext(false);
+        });
+    }
+
     render() {
-        console.log("render me!");
+        const {header, lessonsList, footerDivs} = this.state;
+        const {updateModalContext} = this.props;
 
         return (
-            <div className="app">
+            <StyledLessonsList>
                 <div className="header">
-                    {this.state.header}
+                    {header}
                 </div>
-                <div className="body">
-                    <MyContext.Provider value={"lesson 1"}>
-                        <LessonCard width={123} status={LESSON_STATUS.pending}/>
-                    </MyContext.Provider>
-
-                    <MyContext.Provider value={"lesson 2"}>
-                        <LessonCard status={LESSON_STATUS.missed}/>
-                    </MyContext.Provider>
-                    <MyContext.Provider value={"lesson 3"}>
-                        <LessonCard status={LESSON_STATUS.completed}/>
-                    </MyContext.Provider>
+                <div className="lessonsHolder">
+                    {!!lessonsList.length &&
+                        lessonsList.map(lesson => (
+                            <LessonCard {...lesson}/>
+                        ))
+                    }
                 </div>
+                <button onClick={() => {
+                    updateModalContext(<AddLessonModalContent addLesson={this.addLesson.bind(this)} updateModalContext={updateModalContext}/>)
+                }}>
+                    add lesson
+                </button>
                 <div className="footer">
                     {
-                        this.state.footerDivs.map((divText, index) => {
+                        footerDivs.map((divText, index) => {
                             return (
                                 <div key={index}>
                                     {divText}
@@ -77,9 +99,9 @@ class LessonList extends React.Component {
                         })
                     }
                 </div>
-            </div>
+            </StyledLessonsList>
         )
     }
 }
 
-export default LessonList
+export default withModalContext(LessonList)

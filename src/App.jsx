@@ -2,12 +2,18 @@
 import React from "react";
 import LessonsList from "Scenes/LessonsList/LessonsList";
 import GlobalThemeProvider from "./HOC/GlobalThemeProvider";
+import MainLayout from "./Layouts/MainLayout";
+import GlobalModalProvider from "./HOC/GlobalModalProvider";
 
 const App = () => {
     return (
         <div className="app">
             <GlobalThemeProvider>
-                <LessonsList/>
+                <GlobalModalProvider>
+                    <MainLayout>
+                        <LessonsList/>
+                    </MainLayout>
+                </GlobalModalProvider>
             </GlobalThemeProvider>
         </div>
     )
