@@ -19,7 +19,7 @@ const StyledLessonCard = styled.div`
     }  
   }};
   
-  
+  border: solid 2px black;
   .header {
     font-size: 20px;
   }

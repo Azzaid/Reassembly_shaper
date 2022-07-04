@@ -1,5 +1,6 @@
 import React from "react"
 import styled from "styled-components"
+import {Outlet} from "react-router-dom";
 
 const StyledMainLayout = styled.div`
   width: 100%;
@@ -14,7 +15,7 @@ class MainLayout extends React.Component {
     render() {
         return(
                 <StyledMainLayout>
-                    {this.props.children}
+                    <Outlet/>
                 </StyledMainLayout>
         )
     }

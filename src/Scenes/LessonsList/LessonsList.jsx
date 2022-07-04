@@ -1,5 +1,5 @@
 //node modules
-import React from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import styled from 'styled-components';
 
 //components
@@ -9,6 +9,7 @@ import LessonCard from "components/lessonCard";
 import {LESSON_STATUS} from "constants/lessons/lessonStatus";
 import withModalContext from "HOC/withModalContext";
 import AddLessonModalContent from "./Components/AddLessonModalConten";
+import {Route} from "react-router-dom";
 
 const StyledLessonsList = styled.div`
     .lessonsHolder {
@@ -16,6 +17,18 @@ const StyledLessonsList = styled.div`
       border: 2px solid black;
     }
 `
+
+const LessonListFunctional  = (props) => {
+    const [stateVariable, setterForStateVariable] = useState("");
+
+    const addLesson = (lessonData) => {
+        setterForStateVariable([...stateVariable, lessonData]);
+    }
+
+    return (
+        <h1>{props.header}</h1>
+    )
+}
 
 class LessonList extends React.Component {
     constructor(props) {
@@ -27,6 +40,8 @@ class LessonList extends React.Component {
             someCondition: false,
             lessonsList: [],
         }
+
+        this.someData = 1;
     }
 
     setAnotherHeader(string) {
@@ -56,6 +71,7 @@ class LessonList extends React.Component {
     }*/
 
     addLesson(lessonData) {
+        this.someData = 2;
         this.setState(oldState => {
             return(
                 {
@@ -68,7 +84,7 @@ class LessonList extends React.Component {
     }
 
     render() {
-        const {header, lessonsList, footerDivs} = this.state;
+        const {header, lessonsList, footerDivs, displayedPage} = this.state;
         const {updateModalContext} = this.props;
 
         return (
