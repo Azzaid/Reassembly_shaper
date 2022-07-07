@@ -1,7 +1,7 @@
 import React from "react";
 import {Routes, Route} from "react-router-dom";
 import LessonsList from "Scenes/LessonsList/LessonsList";
-import MainLayout from "../Layouts/MainLayout";
+import MainLayout from "../Layouts/MainLayout/MainLayout";
 import GlobalModalProvider from "../HOC/GlobalModalProvider";
 
 class RootRoute extends React.Component {

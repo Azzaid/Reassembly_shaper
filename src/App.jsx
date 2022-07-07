@@ -2,7 +2,7 @@
 import React from "react";
 import LessonsList from "Scenes/LessonsList/LessonsList";
 import GlobalThemeProvider from "./HOC/GlobalThemeProvider";
-import MainLayout from "./Layouts/MainLayout";
+import MainLayout from "./Layouts/MainLayout/MainLayout";
 import GlobalModalProvider from "./HOC/GlobalModalProvider";
 import {BrowserRouter, HashRouter, MemoryRouter} from "react-router-dom";
 import RootRoute from "./Routes/RootRoute";
