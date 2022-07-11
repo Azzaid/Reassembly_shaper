@@ -1,8 +1,10 @@
 import React from "react";
 import {Routes, Route} from "react-router-dom";
 import LessonsList from "Scenes/LessonsList/LessonsList";
-import MainLayout from "../Layouts/MainLayout/MainLayout";
+import MainLayout from "Layouts/MainLayout/MainLayout";
+import ExtraWideLayout from "Layouts/ExtraWideLayout/ExtraWideLayout"
 import GlobalModalProvider from "../HOC/GlobalModalProvider";
+import {LESSONS_ROUTES} from "../constants/routes";
 
 class RootRoute extends React.Component {
     constructor(props) {
@@ -12,9 +14,10 @@ class RootRoute extends React.Component {
     render () {
         return (
             <Routes>
+                <Route index element={<ExtraWideLayout/>}/>
                 <Route path={"/main"} element={<GlobalModalProvider><MainLayout/></GlobalModalProvider>}>
                     <Route index element={<LessonsList/>}/>
-                    <Route path={"someLessons/:lessonID"} element={<LessonsList/>}/>
+                    <Route path={LESSONS_ROUTES.lessonPage} element={<LessonsList/>}/>
                 </Route>
             </Routes>
         )

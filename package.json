@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "start": "webpack serve",
-    "buildProd": "webpack --config webpack.config.prod.js"
+    "buildProd": "webpack --config webpack.config.prod.js",
+    "server": "json-server ./fakeServer/db.json --port 3004"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",

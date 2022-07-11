@@ -10,8 +10,9 @@ import {LESSON_STATUS} from "constants/lessons/lessonStatus";
 import withModalContext from "HOC/withModalContext";
 import { MyContext } from "HOC/GlobalModalProvider";
 import AddLessonModalContent from "./Components/AddLessonModalConten";
-import {Route} from "react-router-dom";
+import {Route, useParams, useNavigate} from "react-router-dom";
 import LessonsTable from "../LessonsTable/LessonsTable";
+import {LESSONS_PATHS} from "../../constants/routes";
 
 const StyledLessonsList = styled.div`
   width: 80vw;
@@ -68,6 +69,12 @@ const LessonList  = (props) => {
         {lessonName:"5", lessonStatus:"done", theme:"fghfgh"},
         {lessonName:"6", lessonStatus:"done", theme:"5fgbfg54g"},
         {lessonName:"7", lessonStatus:"done", theme:"vcbt544gf5"},
+        {lessonName:"3", lessonStatus:"done", theme:"dfdfdfdf"},
+        {lessonName:"4", lessonStatus:"done", theme:"fghfghfghfghgfh"},
+        {lessonName:"5", lessonStatus:"done", theme:"fghfgh"},
+        {lessonName:"3", lessonStatus:"done", theme:"dfdfdfdf"},
+        {lessonName:"4", lessonStatus:"done", theme:"fghfghfghfghgfh"},
+        {lessonName:"5", lessonStatus:"done", theme:"fghfgh"},
     ]
 
     return (
@@ -84,7 +91,8 @@ const LessonList  = (props) => {
             }}>
                 add lesson
             </button>
-            <LessonsTable columnsFromProps={columns} tableDataFromProps={data} isPaginable/>
+            <br/>
+            <LessonsTable columnsFromProps={columns} tableDataFromProps={data} isPaginable pageSize={4}/>
         </StyledLessonsList>
     )
 }
