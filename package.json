@@ -5,7 +5,7 @@
   "scripts": {
     "start": "webpack serve",
     "buildProd": "webpack --config webpack.config.prod.js",
-    "server": "json-server ./fakeServer/db.json --port 3004"
+    "server": "json-server ./fakeServer/db.json -m ./node_modules/json-server-auth --port 3004"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",
@@ -13,12 +13,14 @@
     "@babel/preset-react": "^7.17.12",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "babel-loader": "^8.2.5",
+    "json-server-auth": "^2.1.0",
     "react-refresh": "^0.14.0",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.9.2"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "html-webpack-plugin": "^5.5.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

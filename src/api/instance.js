@@ -1,62 +1,30 @@
-HTTPS - hyper text transfer protocol
+import axios from "axios";
 
-1. xml excesive markup language
+const fakeServerInstance = axios.create({
+    baseURL:"http://localhost:3004/",
+});
 
+let refreshed = false;
 
+fakeServerInstance.interceptors.response.use((responce) => {
+    if (refreshed === true) {
+        setIsUserLoggedIn(responce.headers.acess, responce.headers.refresh);
+    }
 
-2. JSON JavaScript Object Notation -
-   {}
+}, () => {
+    if (error.code === 403) logOutUser(); isUserLoggedIN = false, wipeUserData , reload page
+})
 
+fakeServerInstance.interceptors.request.use((request) => {
+    request.headers.token = data.acess;
+}, (request) => {
+    if (error.code === 403) logOutUser(); isUserLoggedIN = false, wipeUserData , reload page
+    if (error.code === 403) {
+        request.headers.token = data.refresh;
+        refreshed = true;
+        return axios(request);
+    }
+})
 
-3. blob
-
-
-4.multipart-form-data - add files to form data rich text box
-
-
-
-Get Post Put Patch Delete Option
-
-Get - fetch data no request body
-
-REST
-
-post
-
-post - create [{}, {}, {}] add returns ID
-put - replace [{last}]
-patch - modify data (~setState) returns entry data
-
-delete "gls/lessonsList/ID"
-
-Options
-
-1 - still working
-100 continue
-
-2 - all ok
-
-200 - ok
-
-3 - were moved somewhere redirrectHeader=
-    301 - were moved
-    308 - permanent redirect
-
-    4- youre fault
-400 - badt request
-
-401 - unautorised
-
-403 - forbidden
-
-404 - where am i?
-
-    405 - method not allowed
-
-413 - payload too large
-
-414 - url too long
-
-
-5 - their fault
+export default fakeServerInstance
 

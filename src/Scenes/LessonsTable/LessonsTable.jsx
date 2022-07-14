@@ -130,14 +130,12 @@ const LessonsTable = ({columnsFromProps, tableDataFromProps, isPaginable, pageSi
                 </tr>
             )
         )
-
         return null
     }
 
     return (
         <StyleLessonsTable>
             <input type={"text"} onChange={(e) => {setFilterString(e.target.value)}} value={filterString}/>
-
             <div className={"header"}>Initial table</div>
             <table>
                 <tr>

@@ -6,13 +6,11 @@ import styled from 'styled-components';
 import LessonCard from "components/lessonCard";
 
 //assets / helpers props drilling
-import {LESSON_STATUS} from "constants/lessons/lessonStatus";
-import withModalContext from "HOC/withModalContext";
 import { MyContext } from "HOC/GlobalModalProvider";
 import AddLessonModalContent from "./Components/AddLessonModalConten";
-import {Route, useParams, useNavigate} from "react-router-dom";
 import LessonsTable from "../LessonsTable/LessonsTable";
-import {LESSONS_PATHS} from "../../constants/routes";
+
+import {fetchLessonsList} from "api/lessonsApi";
 
 const StyledLessonsList = styled.div`
   width: 80vw;
@@ -33,8 +31,18 @@ const nonReactFunction = () => {
 nonReactFunction()
 
 const LessonList  = (props) => {
-    const [lessonsList, setLessonsList] = useState([]);
+    const [lessonsList, setLessonsList] = useState(undefined);
     const openModal = useContext(MyContext);
+
+    const getLessonsList = async () => {
+        fetchLessonsList().then(({data}) => {
+            setLessonsList(data);
+        }).catch(() => {});
+    }
+
+    useEffect(() => {
+        getLessonsList();
+    }, []);
 
     const addLesson = (lessonData) => {
         setLessonsList([...lessonsList, lessonData]);
@@ -61,28 +69,18 @@ const LessonList  = (props) => {
             name:"Theme", dataKey:"theme"
         }]
 
-    const data = [
-        {lessonName:"1", lessonStatus:"done", theme:"aaaasss"},
-        {lessonName:"2", lessonStatus:"not", theme:"sdfsdssss"},
-        {lessonName:"3", lessonStatus:"done", theme:"dfdfdfdf"},
-        {lessonName:"4", lessonStatus:"done", theme:"fghfghfghfghgfh"},
-        {lessonName:"5", lessonStatus:"done", theme:"fghfgh"},
-        {lessonName:"6", lessonStatus:"done", theme:"5fgbfg54g"},
-        {lessonName:"7", lessonStatus:"done", theme:"vcbt544gf5"},
-        {lessonName:"3", lessonStatus:"done", theme:"dfdfdfdf"},
-        {lessonName:"4", lessonStatus:"done", theme:"fghfghfghfghgfh"},
-        {lessonName:"5", lessonStatus:"done", theme:"fghfgh"},
-        {lessonName:"3", lessonStatus:"done", theme:"dfdfdfdf"},
-        {lessonName:"4", lessonStatus:"done", theme:"fghfghfghfghgfh"},
-        {lessonName:"5", lessonStatus:"done", theme:"fghfgh"},
-    ]
+    const getLessonsTable = () => {
+        if (lessonsList === undefined) return <div>list loading</div>
+        if (!lessonsList.length) return <div>No lessons created yet</div>
+        return <LessonsTable columnsFromProps={columns} tableDataFromProps={lessonsList} isPaginable pageSize={4}/>
+    }
 
     return (
         <StyledLessonsList>
             <div className="lessonsHolder">
                 {!!lessonsList.length &&
                     lessonsList.map((lesson, index) => (
-                        <LessonCard {...lesson} removeLesson={propperCallBack(index)}/>
+                        <LessonCard {...lesson}/>
                     ))
                 }
             </div>
@@ -92,7 +90,7 @@ const LessonList  = (props) => {
                 add lesson
             </button>
             <br/>
-            <LessonsTable columnsFromProps={columns} tableDataFromProps={data} isPaginable pageSize={4}/>
+            {getLessonsTable()}
         </StyledLessonsList>
     )
 }
