@@ -1,23 +1,31 @@
 //node modules
 import React from "react";
-import LessonsList from "Scenes/LessonsList/LessonsList";
-import GlobalThemeProvider from "./HOC/GlobalThemeProvider";
-import MainLayout from "./Layouts/MainLayout/MainLayout";
-import GlobalModalProvider from "./HOC/GlobalModalProvider";
 import {BrowserRouter, HashRouter, MemoryRouter} from "react-router-dom";
-import RootRoute from "./Routes/RootRoute";
+import {Provider} from "react-redux";
+
+import GlobalThemeProvider from "./HOC/GlobalThemeProvider";
 import GlobalErrorBoundary from "./HOC/GlobalErrorBoundary";
+
+import LoginRoute from "./Routes/LoginRouter";
+
+import {persistor, store} from "store/initStore"
+import {PersistGate} from "redux-persist/integration/react";
 
 const App = () => {
     return (
         <div className="app">
-            <BrowserRouter>
-                <GlobalThemeProvider>
-                    <GlobalErrorBoundary>
-                        <RootRoute/>
-                    </GlobalErrorBoundary>
-                </GlobalThemeProvider>
-            </BrowserRouter>
+            <Provider store={store}>
+                <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
+                    <BrowserRouter>
+                        <GlobalThemeProvider>
+                            <GlobalErrorBoundary>
+                                <LoginRoute/>
+                            </GlobalErrorBoundary>
+                        </GlobalThemeProvider>
+                    </BrowserRouter>
+                </PersistGate>
+            </Provider>
+
         </div>
     )
 }

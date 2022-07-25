@@ -78,7 +78,7 @@ const LessonList  = (props) => {
     return (
         <StyledLessonsList>
             <div className="lessonsHolder">
-                {!!lessonsList.length &&
+                {(lessonsList && lessonsList.length) &&
                     lessonsList.map((lesson, index) => (
                         <LessonCard {...lesson}/>
                     ))

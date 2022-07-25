@@ -4,7 +4,9 @@ const fakeServerInstance = axios.create({
     baseURL:"http://localhost:3004/",
 });
 
-let refreshed = false;
+import {store} from "store/initStore"
+
+/*let refreshed = false;
 
 fakeServerInstance.interceptors.response.use((responce) => {
     if (refreshed === true) {
@@ -18,13 +20,13 @@ fakeServerInstance.interceptors.response.use((responce) => {
 fakeServerInstance.interceptors.request.use((request) => {
     request.headers.token = data.acess;
 }, (request) => {
-    if (error.code === 403) logOutUser(); isUserLoggedIN = false, wipeUserData , reload page
+    if (error.code === 403) store.dispatch({type:"userLogOut"});
     if (error.code === 403) {
         request.headers.token = data.refresh;
         refreshed = true;
         return axios(request);
     }
-})
+})*/
 
 export default fakeServerInstance
 

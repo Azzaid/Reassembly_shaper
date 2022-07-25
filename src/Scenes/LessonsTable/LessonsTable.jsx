@@ -56,7 +56,6 @@ const LessonsTable = ({columnsFromProps, tableDataFromProps, isPaginable, pageSi
 
     // handlers
     const handleSortClick = (sortKey) => () => {
-        console.log("add sort by", sortKey);
      if (sortKey === sortBy) {
          setSortDirection(-1 * sortDirection);
      } else {

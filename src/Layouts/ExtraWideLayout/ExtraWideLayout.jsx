@@ -16,6 +16,7 @@ class ExtraWideLayout extends React.Component {
     render() {
         return(
             <StyledExtraWideLayout>
+                extra vide
                 <Outlet/>
             </StyledExtraWideLayout>
         )
