@@ -60,14 +60,14 @@ const LessonList  = (props) => {
     }
 
     const columns = [{
-        name:"Lesson name", dataKey:"lessonName"
+        name:"Lesson name", dataKey:"lessonName",
     },
         {
             name:"Lesson status", dataKey:"lessonStatus"
         },
         {
             name:"Theme", dataKey:"theme"
-        }]
+        }];
 
     const getLessonsTable = () => {
         if (lessonsList === undefined) return <div>list loading</div>

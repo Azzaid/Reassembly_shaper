@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import styled from "styled-components";
-import useThrottle from "../../hooks/useThrottledCallBack";
+import useThrottle from "hooks/useThrottledCallBack";
 import {useSearchParams} from "react-router-dom";
 
 const StyleLessonsTable = styled.div`
@@ -38,7 +38,7 @@ const StyleLessonsTable = styled.div`
   }
 `
 
-const LessonsTable = ({columnsFromProps, tableDataFromProps, isPaginable, pageSize=10}) => {
+const LessonsTable = ({columnsFromProps, tableDataFromProps, isPaginable, pageSize= 10}) => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [filterString, setFilterString] = useState(searchParams.filterString || "");
@@ -62,12 +62,14 @@ const LessonsTable = ({columnsFromProps, tableDataFromProps, isPaginable, pageSi
          setSortBy(sortKey);
          setSortDirection(1);
      }
-     setPage(0);
+        setPage(0);
     }
 
     //data update functions
-    const filterTable= (data, filterString) => {
+    const filterTable= (data, filterString, columnsFromProps) => {
         if (!filterString) return [...data];
+        setPage("false");
+
         return data.filter(entry => {
             let passed = false;
             columnsFromProps.map(columnConfig => {
@@ -83,33 +85,27 @@ const LessonsTable = ({columnsFromProps, tableDataFromProps, isPaginable, pageSi
         });
     };
 
+
     const paginateTable = (data, page) => {
         return data.slice(page * pageSize, (page + 1)*pageSize);
     };
 
     const updateTable = (tableDataFromProps, sortBy, sortDirection, filterString, page) => {
         setSearchParams({sortBy, sortDirection, filterString, page});
-        console.log('update table fired', sortBy);
-        setTimeout(() => {
-            const filtered = filterTable(tableDataFromProps, filterString);
-            setFilteredData(filtered);
 
-            setTimeout(() => {
-                const sorted = sortTable(filtered, sortBy, sortDirection);
-                setSortedData(sorted);
+        const filtered = filterTable(tableDataFromProps, filterString);
+        setFilteredData(filtered);
 
-                setTimeout(() => {
-                    const paginated = paginateTable(sorted, page);
-                    setTableData(paginated);
-                }, 1000)
-            }, 1000)
-        }, 1000)
+        const sorted = sortTable(filtered, sortBy, sortDirection);
+        setSortedData(sorted);
+
+        const paginated = paginateTable(sorted, page);
+        setTableData(paginated);
     };
 
-    const throttledUpdateTable = useThrottle(updateTable, 2000);
+    const throttledUpdateTable = useThrottle(updateTable, 1000, [sortBy, sortDirection, filterString, page]);
 
     useEffect(() => {
-        console.log('useEffect fired', sortBy, sortDirection, filterString, page);
         throttledUpdateTable(tableDataFromProps, sortBy, sortDirection, filterString, page);
     }, [filterString, sortBy, sortDirection, page, tableDataFromProps]);
 
@@ -122,6 +118,7 @@ const LessonsTable = ({columnsFromProps, tableDataFromProps, isPaginable, pageSi
         if (tableData && tableData.length) return  tableData.map(entry => (
                 <tr>
                     {columnsFromProps.map(column => {
+                        if (column.cellRenderer) return <td>{column.cellRenderer(entry[column.dataKey])}</td>
                         return <td>
                             {entry[column.dataKey]}
                         </td>
@@ -135,24 +132,7 @@ const LessonsTable = ({columnsFromProps, tableDataFromProps, isPaginable, pageSi
     return (
         <StyleLessonsTable>
             <input type={"text"} onChange={(e) => {setFilterString(e.target.value)}} value={filterString}/>
-            <div className={"header"}>Initial table</div>
-            <table>
-                <tr>
-                    {columnsFromProps.map(column => {
-                        return <td onClick={handleSortClick(column.dataKey)}>
-                            <div className={"headerCell"}>
-                                {column.name}
-                                {sortBy === column.dataKey &&
-                                    <div className={`arrow ${sortDirection === 1 ? "up" : "down"}`}></div>
-                                }
-                            </div>
-                        </td>
-                    })}
-                </tr>
-                {getTableBody(tableDataFromProps, "initial")}
-            </table>
 
-            <div className={"header"}>Filtered table</div>
             <table>
                 <tr>
                     {columnsFromProps.map(column => {
@@ -166,41 +146,9 @@ const LessonsTable = ({columnsFromProps, tableDataFromProps, isPaginable, pageSi
                         </td>
                     })}
                 </tr>
-                {getTableBody(filteredData, "filtered")}
-            </table>
 
-            <div className={"header"}>Sorted data</div>
-            <table>
-                <tr>
-                    {columnsFromProps.map(column => {
-                        return <td onClick={handleSortClick(column.dataKey)}>
-                            <div className={"headerCell"}>
-                                {column.name}
-                                {sortBy === column.dataKey &&
-                                    <div className={`arrow ${sortDirection === 1 ? "up" : "down"}`}></div>
-                                }
-                            </div>
-                        </td>
-                    })}
-                </tr>
-                {getTableBody(sortedData, "sorted")}
-            </table>
-
-            <div className={"header"}>Paginated table (final)</div>
-            <table>
-                <tr>
-                    {columnsFromProps.map(column => {
-                        return <td onClick={handleSortClick(column.dataKey)}>
-                            <div className={"headerCell"}>
-                                {column.name}
-                                {sortBy === column.dataKey &&
-                                    <div className={`arrow ${sortDirection === 1 ? "up" : "down"}`}></div>
-                                }
-                            </div>
-                        </td>
-                    })}
-                </tr>
                 {getTableBody(tableData, "paginated")}
+
                 {isPaginable &&
                     <tfoot>
                     <tr>

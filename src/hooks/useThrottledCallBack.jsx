@@ -1,6 +1,6 @@
 import {useCallback} from "react";
 
-const useThrottle = (callBack, timeout) => {
+const useThrottle = (callBack, timeout, deps) => {
     let timeoutID = null;
 
     return useCallback((...args) => {
@@ -17,7 +17,7 @@ const useThrottle = (callBack, timeout) => {
             callBack(...args);
             timeoutID = null;
         }, timeout);
-    }, [])
+    }, [...deps])
 }
 
 export default useThrottle
