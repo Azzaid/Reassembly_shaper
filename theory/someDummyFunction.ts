@@ -69,3 +69,32 @@ function some2Name<aType, bType>(a:aType, b:bType):aType | bType  {
 }
 
 some2Name<string, number>("string", 2);
+
+
+type Human = {
+    name:string,
+    age:number
+}
+
+type Player = {
+    level:number
+}
+
+type HumaPlayer = Human & Player
+
+class User2 implements UserInterface {
+    public name: string
+    protected age: number
+    private email: string
+    private isSober: boolean
+
+    constructor(email:string)
+    constructor(name:string, age:number, isSober:boolean)
+    constructor(name:string) {
+        this.name = name;
+    }
+
+    getName() {
+        return this.name
+    }
+}

@@ -5,30 +5,63 @@ import {mapDispatchToPropsFactory} from "react-redux/es/connect/mapDispatchToPro
 import {createUserLogInAction} from "../store/actions/userActionCreators";
 import {asynchUserLogInAction} from "../store/selectors/userSelectors";
 
+import PermissionGale from "HOC/PermissionGate"
+import getPermission from "HOC/getPermission"
+
 import { Formik, Form, FieldArray} from "formik";
 import FormikInput from "../Components/FormikInputs/FormikInput";
+import {useTypedDispatch} from "../store/hooks";
+
+type EducationRecord = {
+    startDate: string,
+    endDate: string,
+    University: string
+}
+
+type LoginPageFormData = {
+    email: string,
+    password: string,
+    authorsNames:string[],
+    education: EducationRecord[]
+}
+
+type LoginPageErrorsData = {
+    email?: string,
+    password?: string,
+    authorsNames?:string[],
+    education?: EducationRecord[]
+}
+
+interface LoginPageProps {
+    someRandomNumber?: number,
+}
 
 const StyledLoginPage = styled.div`
 `
 
-const LoginPage = () => {
-    const dispatch = useDispatch();
+const LoginPage = (props:LoginPageProps): JSX.Element => {
+    const dispatch = useTypedDispatch();
 
-    const initialFormValues = {
+    const initialFormValues: LoginPageFormData = {
         email:"",
         password:"",
         authorsNames:["", "", ""],
-        education: [{}, {}, {}]
+        education: []
     }
 
-    const validateForm = (formValues) => {
+    const validateForm = (formValues: LoginPageFormData): LoginPageErrorsData | void => {
         console.log("form values", formValues);
         let isValid = true;
-        let errorsObject = {};
+        let errorsObject: LoginPageErrorsData = {};
 
         if (!formValues.email) {
             isValid = false;
             errorsObject.email = "Email is mandatory";
+        }
+
+        if (!formValues.education && getPermission("univercityInput")) {
+            isValid = false;
+            errorsObject.education = "Education is mandatory";
         }
 
         isValid = false;
@@ -42,7 +75,10 @@ const LoginPage = () => {
     <StyledLoginPage>
         <Formik initialValues={initialFormValues}
                 validate={validateForm}
-                onSubmit={(formValues) => {console.log("form values", formValues)}}
+                onSubmit={(formValues:LoginPageFormData) => {
+                    console.log("form values", formValues);
+                    dispatch(createUserLogInAction("12"));
+                }}
         render={({values}) => {
             return (
                 <Form>
@@ -62,9 +98,9 @@ const LoginPage = () => {
                                     return (
                                         <React.Fragment>
                                             <button type={"button"} onClick={() => {arrayHelpers.remove(index)}}>Delete</button>
+                                            <FormikInput placeholder={"University"} name={`education.${index}.name`}/>
                                             <FormikInput placeholder={"startDate"} name={`education.${index}.startDate`}/>
                                             <FormikInput placeholder={"endDate"} name={`education.${index}.endDate`}/>
-                                            <FormikInput placeholder={"University"} name={`education.${index}.name`}/>
                                         </React.Fragment>
                                     )
                                 })}

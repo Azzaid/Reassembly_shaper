@@ -4,9 +4,10 @@ import LoginPage from "../Scenes/LoginPage";
 import RootRoute from "./RootRoute";
 import {useSelector} from "react-redux";
 import {isLoggedIn} from "store/selectors/userSelectors";
+import {useTypedSelector} from "../store/hooks";
 
 const LoginRoute  = () => {
-    const userLoggedIn = useSelector(isLoggedIn);
+    const userLoggedIn = useTypedSelector(isLoggedIn);
     const location = useLocation();
 
     /*gotUserStartPage = () => {
